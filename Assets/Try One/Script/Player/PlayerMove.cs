@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,17 +7,26 @@ using Mors;
 
 public class PlayerMove : MonoBehaviour
 {
-    public GameObject it;
     private CharacterController _characterController;
     private Text text;
-    private GameObject _eyes, _body;
-    private float _yRotation, _xRotation;
+    public GameObject mainCamera;
+    public float _yRotation, _xRotation;
     public Vector3 test;
-
+    private Animator _animator;
+    private Transform _cameraTransform;
+    public float Axize;
+    
     void Start()
     {
-        Get_Component();
+        _characterController = GetComponent<CharacterController>();
+        _animator = GetComponentInChildren<Animator>();
     }
+
+    private void Awake()
+    {
+         _cameraTransform = mainCamera.transform;
+    }
+
     void Update()
     {
         var varMove= GameGlobalVariables.game_status == GameStatus.Main &&
@@ -24,19 +34,17 @@ public class PlayerMove : MonoBehaviour
         if (varMove)
         {
             Character_Move(Input.GetKey(KeyCode.LeftShift));
-            Eyes_Move(!Input.GetKey(KeyCode.Tab));
+            Camera_Rotation(!Input.GetKey(KeyCode.Tab));
         }
+        
+        var varReadyFire = Input.GetKey(KeyCode.Mouse1);
+        var aimId = Animator.StringToHash("Aim");
+        _animator.SetBool(aimId,varReadyFire);
+        var runId = Animator.StringToHash("Run");
+        _animator.SetBool(runId,Input.GetKey(KeyCode.LeftShift));
+
     }
-    
-    /// <summary>
-    /// 组件获取函数
-    /// </summary>
-    private void Get_Component()
-    {
-        _characterController = GetComponent<CharacterController>();
-        _eyes = GameObject.Find("Player/Body/Eyes");
-        _body = GameObject.Find("Player");
-    }
+
 
     /// <summary>
     /// 角色运动控制器(包括重力模拟
@@ -53,22 +61,25 @@ public class PlayerMove : MonoBehaviour
             _characterController.Move(varMotion);
             //return;
         }
+
         //移动模拟
-        Vector3 finalSpeed = (Input.GetAxis("Horizontal") * transform.right + 
-                              Input.GetAxis("Vertical") * transform.forward) *Time.deltaTime;
-        test = finalSpeed;
-        if (finalSpeed == Vector3.zero)
+        Vector3 moveDirection = Vector3.Normalize(Input.GetAxisRaw("Horizontal") * transform.right +
+                                                 Input.GetAxisRaw("Vertical") * transform.forward)*Time.deltaTime;
+        test = moveDirection;
+        if (moveDirection == Vector3.zero)
         {
             PlayerData.player_condition = PlayerCondition.Stand;
         }
         else if (meet_run_condition)
         {
-            _characterController.Move(finalSpeed * PlayerData.player_run_speed);
+            var moveVector =  PlayerData.player_run_speed *moveDirection;
+            _characterController.Move(moveVector);
             PlayerData.player_condition = PlayerCondition.Run;
         }
-        else if (!meet_run_condition)
-        {
-            _characterController.Move(finalSpeed * PlayerData.player_walk_speed);
+        else
+        {            
+            var moveVector =  PlayerData.player_walk_speed *moveDirection;
+            _characterController.Move(moveDirection * PlayerData.player_walk_speed);
             PlayerData.player_condition = PlayerCondition.Walk;
         }
     }
@@ -79,7 +90,7 @@ public class PlayerMove : MonoBehaviour
     /// <param name="meet_move_condition">
     /// 主界面+鼠标锁定+tab未按下=真
     /// </param>
-    private void Eyes_Move(bool meet_move_condition)
+    private void Camera_Rotation(bool meet_move_condition)
     {
         if (!meet_move_condition) return;
         var mouseX = Input.GetAxis("Mouse X") * BaseSetting.MouseSensitivity * Time.deltaTime;
@@ -88,12 +99,18 @@ public class PlayerMove : MonoBehaviour
         _yRotation = Mathf.Clamp(_yRotation, -50f, 50f);
         _xRotation += mouseX;
         //身体左右旋转
-        _body.transform.rotation = Quaternion.Euler(0, _xRotation, 0);
+        this.transform.rotation = Quaternion.Euler(0, _xRotation, 0);
+        //Quaternion targetDir = Quaternion.Euler(0, _xRotation, 0);
+        //this.transform.rotation = Quaternion.Lerp(transform.rotation, targetDir, 0);
         //头部同步左右旋转且上下点
-        _eyes.transform.rotation = Quaternion.Euler(_yRotation, _xRotation, 0);
+        mainCamera.transform.rotation = Quaternion.Euler(_yRotation, _xRotation, 0);
         //绘制射线
-        PublicVariables.ray = new Ray(_eyes.transform.position, _eyes.transform.forward);
+        PublicVariables.ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
     }
 
+
+    private void InputCheck()
+    {
+    }
 }
 
