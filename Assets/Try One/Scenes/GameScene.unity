@@ -1586,6 +1586,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 241556385}
+  - component: {fileID: 241556386}
+  - component: {fileID: 241556387}
   m_Layer: 0
   m_Name: Mode
   m_TagString: Untagged
@@ -1609,6 +1611,34 @@ Transform:
   m_Father: {fileID: 1947428858}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &241556386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241556384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 660cca2d981ee7c4e84add1f00abd54c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &241556387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241556384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0c9c42b267d7e4ca5253fad3dab298, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletNum: {fileID: 1179605295}
+  muzzle: {fileID: 809657515}
+  test: {fileID: 963194228}
+  bullet: {fileID: 6530164885690263059, guid: 32475610db35d7f47a3f76a6e79409c8, type: 3}
 --- !u!1 &265364569
 GameObject:
   m_ObjectHideFlags: 0
@@ -2321,6 +2351,26 @@ Transform:
   m_Father: {fileID: 2104091855}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &442008962 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1640908652775104, guid: cd87e5026d1695148aabe96121c526ef,
+    type: 3}
+  m_PrefabInstance: {fileID: 1532806071}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &442008965
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 442008962}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: af5390e2a0373984db3740f21c0ec034, type: 3}
 --- !u!1 &477821147
 GameObject:
   m_ObjectHideFlags: 0
@@ -3559,6 +3609,36 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 794005288}
   m_CullTransparentMesh: 0
+--- !u!1 &809657514
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 809657515}
+  m_Layer: 0
+  m_Name: Muzzle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &809657515
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809657514}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 963194228}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &823910696
 GameObject:
   m_ObjectHideFlags: 0
@@ -4063,7 +4143,8 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: 0, y: 0.071337275, z: -0.08557584}
   m_LocalScale: {x: 0.5000001, y: 0.5000002, z: 0.5000001}
-  m_Children: []
+  m_Children:
+  - {fileID: 809657515}
   m_Father: {fileID: 46000288}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11744,7 +11825,7 @@ PrefabInstance:
     - target: {fileID: 9500000, guid: 56ec0b9a5b8762642811ea26a5242e04, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 4244e206520965240810b2de53faa670, type: 2}
+      objectReference: {fileID: 9100000, guid: d6db4f8d5b236394bb9850d6372b35db, type: 2}
     - target: {fileID: 13700000, guid: 56ec0b9a5b8762642811ea26a5242e04, type: 3}
       propertyPath: m_CastShadows
       value: 2
@@ -12472,7 +12553,6 @@ MonoBehaviour:
   _yRotation: 0
   _xRotation: 0
   test: {x: 0, y: 0, z: 0}
-  Axize: 0
 --- !u!4 &1947428858
 Transform:
   m_ObjectHideFlags: 0

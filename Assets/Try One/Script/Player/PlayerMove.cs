@@ -8,18 +8,17 @@ using Mors;
 public class PlayerMove : MonoBehaviour
 {
     private CharacterController _characterController;
-    private Text text;
+    [Space]
+    [Header("Camera")]
     public GameObject mainCamera;
     public float _yRotation, _xRotation;
     public Vector3 test;
-    private Animator _animator;
     private Transform _cameraTransform;
-    public float Axize;
     
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
-        _animator = GetComponentInChildren<Animator>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Awake()
@@ -37,11 +36,7 @@ public class PlayerMove : MonoBehaviour
             Camera_Rotation(!Input.GetKey(KeyCode.Tab));
         }
         
-        var varReadyFire = Input.GetKey(KeyCode.Mouse1);
-        var aimId = Animator.StringToHash("Aim");
-        _animator.SetBool(aimId,varReadyFire);
-        var runId = Animator.StringToHash("Run");
-        _animator.SetBool(runId,Input.GetKey(KeyCode.LeftShift));
+
 
     }
 
@@ -99,10 +94,7 @@ public class PlayerMove : MonoBehaviour
         _yRotation = Mathf.Clamp(_yRotation, -50f, 50f);
         _xRotation += mouseX;
         //身体左右旋转
-        this.transform.rotation = Quaternion.Euler(0, _xRotation, 0);
-        //Quaternion targetDir = Quaternion.Euler(0, _xRotation, 0);
-        //this.transform.rotation = Quaternion.Lerp(transform.rotation, targetDir, 0);
-        //头部同步左右旋转且上下点
+        gameObject.transform.rotation = Quaternion.Euler(0, _xRotation, 0);
         mainCamera.transform.rotation = Quaternion.Euler(_yRotation, _xRotation, 0);
         //绘制射线
         PublicVariables.ray = new Ray(_cameraTransform.position, _cameraTransform.forward);
