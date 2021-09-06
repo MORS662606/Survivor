@@ -19,10 +19,8 @@ public class Bullet : MonoBehaviour
 
     internal void OutOfTheChamber(Vector3 speedDir)
     {
-        var normalized = speedDir.normalized;
-        _rigidbody.velocity=normalized*10;
+        _rigidbody.velocity=speedDir.normalized*100;
         Destroy(this.gameObject,2f);
-
     } 
     
     

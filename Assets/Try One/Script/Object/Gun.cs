@@ -21,7 +21,7 @@ public class Gun : MonoBehaviour
 
     }
 
-    internal void GunFire()
+    public void AimShoot()
     {
         if (BulletUsing != 0)
         {
@@ -31,6 +31,15 @@ public class Gun : MonoBehaviour
         }
     }
 
+    public void Shoot()
+    {
+        if (BulletUsing != 0)
+        {
+            BulletUsing--;
+            GameObject varBullet = (GameObject)Instantiate(bullet,muzzle.position,muzzle.rotation);
+            varBullet.GetComponent<Bullet>().OutOfTheChamber(muzzle.position-test.position);
+        }
+    }
     internal void Reload()
     {
         if (BulletBackup > ammunitionCapacity)
