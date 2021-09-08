@@ -50,11 +50,11 @@ public class PlayerAnimator : MonoBehaviour
             {
                 if (stateInfo.IsName("Idle") || stateInfo.IsName("Walk"))
                 {
-                    _animator.Play("Shoot");
+                    _animator.Play("Fire");
                 }
                 else if (stateInfo.IsName("Aim In") || stateInfo.IsName("Aim Fire Pose"))
                 {
-                   _animator.Play("Aim Shoot");
+                   _animator.Play("Aim Fire");
                 }
             }
    

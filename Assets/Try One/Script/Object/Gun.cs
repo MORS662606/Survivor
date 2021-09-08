@@ -36,11 +36,12 @@ public class Gun : MonoBehaviour
     {
         if (BulletUsing == 0) return;
 
-        //BulletUsing--;
+       BulletUsing--;
         var varBullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation);
         var speedDir = muzzle.position - start.position;
         var stochastic = UnityEngine.Random.rotation.eulerAngles;
-        var offset = UnityEngine.Vector3.Cross(stochastic, speedDir).normalized/100;
+        var offset =UnityEngine.Random.Range(-2f,2f)*
+            UnityEngine.Vector3.Cross(stochastic, speedDir).normalized/100;
         varBullet.GetComponent<Bullet>().OutOfTheChamber(speedDir-offset);
     }
 
@@ -57,5 +58,12 @@ public class Gun : MonoBehaviour
             BulletUsing = BulletBackup;
             BulletBackup = 0;
         }
+    }
+    
+    //共用代码块
+
+    private void FireLight()
+    {
+        
     }
 }
