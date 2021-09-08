@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
     public float _yRotation, _xRotation;
     public Vector3 test;
     private Transform _cameraTransform;
-    
+    internal bool walkMark=false;
     void Start()
     {
         _characterController = GetComponent<CharacterController>();

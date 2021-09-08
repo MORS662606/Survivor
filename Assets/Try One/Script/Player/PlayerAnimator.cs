@@ -20,6 +20,25 @@ public class PlayerAnimator : MonoBehaviour
         if (GameGlobalVariables.game_canavs == GameCanvas.MainUI)
         {
             var stateInfo = _animator.GetCurrentAnimatorStateInfo(0);
+            
+            //Move
+            var walkId = Animator.StringToHash("Walk");
+            var runId = Animator.StringToHash("Run");
+            switch ( PlayerData.player_condition)
+            {
+                case PlayerCondition.Stand:
+                    _animator.SetBool(walkId,false);
+                    _animator.SetBool(runId,false);
+                    break;
+                case PlayerCondition.Walk:
+                    _animator.SetBool(walkId,true);
+                    _animator.SetBool(runId,false);
+                    break;
+                case PlayerCondition.Run:
+                    _animator.SetBool(walkId,false);
+                    _animator.SetBool(runId,true);
+                    break;
+            }
 
             //Aim
             var aimId = Animator.StringToHash("Aim");
@@ -66,13 +85,6 @@ public class PlayerAnimator : MonoBehaviour
 
                 _gun.Reload();
             }
-
-
-            //Run
-            var runId = Animator.StringToHash("Run");
-            var runBool = Input.GetAxis("Vertical") != 0 && Input.GetKey(KeyCode.LeftShift);
-            _animator.SetBool(runId, runBool);
-
 
             //Inspect
             var inspectId = Animator.StringToHash("Inspect");
