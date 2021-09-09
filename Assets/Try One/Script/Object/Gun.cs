@@ -14,7 +14,9 @@ public class Gun : MonoBehaviour
     public Transform muzzle;
     public Transform start;
     public Transform startAim;
+    public Transform casePop;
     public GameObject bullet;
+    public GameObject  cartridge_case;
 
     private void FixedUpdate()
     {
@@ -28,21 +30,28 @@ public class Gun : MonoBehaviour
     {
         if (BulletUsing == 0) return;
         BulletUsing--;
+        //子弹射出
         var varBullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation);
-        varBullet.GetComponent<Bullet>().OutOfTheChamber(muzzle.position - startAim.position);
+        varBullet.GetComponent<Bullet>().Popup(muzzle.position - startAim.position);
+        //弹壳弹出
+        var varCase = (GameObject)Instantiate(cartridge_case, casePop.position, casePop.rotation);
+        varCase.GetComponent<CartridgeCase>().CasePopUp();
     }
 
     public void Shoot()
     {
         if (BulletUsing == 0) return;
-
        BulletUsing--;
+       //子弹射出
         var varBullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation);
         var speedDir = muzzle.position - start.position;
         var stochastic = UnityEngine.Random.rotation.eulerAngles;
         var offset =UnityEngine.Random.Range(-2f,2f)*
             UnityEngine.Vector3.Cross(stochastic, speedDir).normalized/100;
-        varBullet.GetComponent<Bullet>().OutOfTheChamber(speedDir-offset);
+        varBullet.GetComponent<Bullet>().Popup(speedDir-offset);
+        //弹壳弹出
+        var varCase = (GameObject)Instantiate(cartridge_case, casePop.position, casePop.rotation);
+        varCase.GetComponent<CartridgeCase>().CasePopUp();
     }
 
     internal void Reload()
@@ -62,8 +71,5 @@ public class Gun : MonoBehaviour
     
     //共用代码块
 
-    private void FireLight()
-    {
-        
-    }
+  
 }

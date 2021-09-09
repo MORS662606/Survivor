@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
         
     }
 
-    internal void OutOfTheChamber(Vector3 speedDir)
+    internal void Popup(Vector3 speedDir)
     {
         _rigidbody.velocity=speedDir.normalized*100;
         Destroy(this.gameObject,2f);
