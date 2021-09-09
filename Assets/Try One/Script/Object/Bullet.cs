@@ -17,6 +17,13 @@ public class Bullet : MonoBehaviour
         
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!other.gameObject.CompareTag("Target")) return; 
+        Destroy(other.gameObject);
+        Destroy(this.gameObject);
+    }
+
     internal void Popup(Vector3 speedDir)
     {
         _rigidbody.velocity=speedDir.normalized*100;

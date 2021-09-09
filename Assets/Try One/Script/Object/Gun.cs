@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UI;
+using Vector3 = UnityEngine.Vector3;
 
 public class Gun : MonoBehaviour
 {
@@ -16,8 +17,8 @@ public class Gun : MonoBehaviour
     public Transform startAim;
     public Transform casePop;
     public GameObject bullet;
-    public GameObject  cartridge_case;
-
+    public GameObject  cartridgeCase;
+    public AudioSource fireAudio;
     private void FixedUpdate()
     {
         bulletNum.text = BulletUsing.ToString() + "/" + BulletBackup.ToString();
@@ -29,19 +30,15 @@ public class Gun : MonoBehaviour
     public void AimShoot()
     {
         if (BulletUsing == 0) return;
-        BulletUsing--;
         //子弹射出
         var varBullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation);
         varBullet.GetComponent<Bullet>().Popup(muzzle.position - startAim.position);
-        //弹壳弹出
-        var varCase = (GameObject)Instantiate(cartridge_case, casePop.position, casePop.rotation);
-        varCase.GetComponent<CartridgeCase>().CasePopUp();
+        ShootCode();
     }
 
     public void Shoot()
     {
         if (BulletUsing == 0) return;
-       BulletUsing--;
        //子弹射出
         var varBullet = (GameObject)Instantiate(bullet, muzzle.position, muzzle.rotation);
         var speedDir = muzzle.position - start.position;
@@ -49,9 +46,8 @@ public class Gun : MonoBehaviour
         var offset =UnityEngine.Random.Range(-2f,2f)*
             UnityEngine.Vector3.Cross(stochastic, speedDir).normalized/100;
         varBullet.GetComponent<Bullet>().Popup(speedDir-offset);
-        //弹壳弹出
-        var varCase = (GameObject)Instantiate(cartridge_case, casePop.position, casePop.rotation);
-        varCase.GetComponent<CartridgeCase>().CasePopUp();
+        ShootCode();
+       
     }
 
     internal void Reload()
@@ -70,6 +66,14 @@ public class Gun : MonoBehaviour
     }
     
     //共用代码块
-
+    private void ShootCode()
+    {
+        BulletUsing--;
+        //弹壳弹出
+        var varCase = (GameObject)Instantiate(cartridgeCase, casePop.position, casePop.rotation);
+        varCase.GetComponent<CartridgeCase>().CasePopUp();
+        //发出枪声
+        fireAudio.Play();
+    }
   
 }
