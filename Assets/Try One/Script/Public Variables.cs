@@ -7,15 +7,32 @@ using System;
 
 namespace Mors
 {
-    public enum MouseStatus { Locked, Freedom };
-
-    public enum GameStatus { Main, Bag, Pause };
-
-    public enum GameCanvas { PauseUI, MainUI, BagUI };
-
-    public enum PlayerCondition { Walk, Run, Stand };
-
-    public enum PlayerBuff { };
+    public enum MouseStatus
+    {
+        Locked,
+        Freedom
+    };
+    public enum GameStatus
+    {
+        Main,
+        Bag,
+        Pause
+    };
+    public enum GameCanvas
+    {
+        PauseUI,
+        MainUI,
+        BagUI
+    };
+    public enum PlayerCondition
+    {
+        Walk,
+        Run,
+        Stand
+    };
+    public enum PlayerBuff
+    {
+    };
 
     [Serializable]
     class item
@@ -25,18 +42,14 @@ namespace Mors
 
         internal byte num
         {
-            get
-            {
-                return item_number;
-            }
+            get { return item_number; }
         }
+
         internal string name
         {
-            get
-            {
-                return item_name;
-            }
+            get { return item_name; }
         }
+
         internal void add_number(byte num)
         {
             if ((item_number + num) > 255)
@@ -48,6 +61,7 @@ namespace Mors
                 item_number += num;
             }
         }
+
         //Analysis Data to Struct the item
         internal item(string Data)
         {
@@ -70,13 +84,15 @@ namespace Mors
         [SerializeField] internal List<item> props;
 
         public Serialize()
-        { 
+        {
         }
+
         public Serialize(List<item> data)
         {
             props = new List<item>();
             props = data;
         }
+
         public Serialize(Dictionary<string, string> data)
         {
             dictionary_t_key = new List<string>();
@@ -92,6 +108,7 @@ namespace Mors
         {
             return props;
         }
+
         internal Dictionary<string, string> Data_Back(bool temp = true)
         {
             Dictionary<string, string> back_dictionary = new Dictionary<string, string>();
@@ -99,17 +116,16 @@ namespace Mors
             {
                 back_dictionary.Add(dictionary_t_key[i], dictionary_t_value[i]);
             }
+
             return back_dictionary;
         }
 
         internal void Load(string path)
         {
-            SimpleFunction.Json_Write(JsonUtility.ToJson(this,true), path);
+            SimpleFunction.Json_Write(JsonUtility.ToJson(this, true), path);
         }
     }
 }
-
-[SerializeField]
 internal class PlayerData
 {
     internal static PlayerCondition player_condition = PlayerCondition.Stand;
@@ -159,7 +175,6 @@ internal class GameGlobalVariables
     internal static GameCanvas game_canavs = GameCanvas.MainUI;
 
     internal static MouseStatus mouse_status = MouseStatus.Locked;
-
 }
 
 internal class SimpleFunction
@@ -206,7 +221,6 @@ internal class SimpleFunction
         }
         catch (Exception exceptione)
         {
-
             Debug.Log(exceptione.Message);
         }
     }
@@ -237,16 +251,15 @@ internal class SimpleFunction
         {
             Debug.Log(exception.Message);
         }
+
         return null;
     }
 }
 
 internal class KeyboardManager
 {
-
 }
 
 internal class GameComponent
 {
-
 }

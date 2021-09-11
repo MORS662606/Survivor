@@ -2,69 +2,76 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
-using UnityEngine.UI;
-using Mors;
+
+  [Serializable]public struct Item
+{
+    public int itemId;
+    public int itemNum;
+    public Item(int id,int num)
+    {
+        itemId = id;
+        itemNum = num;
+    }
+}
 
 public class PlayerBag : MonoBehaviour
 {
-    ///<value> 
-    ///包装物品的类项
-    ///</value>
-    [SerializeField] private Serialize serializeProps = new Serialize();
+    public  List<Item> bagItem = new List<Item>();
 
     private void Awake()
     {
-        BagItemsLoad("C:/Users/expre/Desktop/DataBase.json");
-    }
-    
-    /// <summary>
-    /// 加载存档中的背包物品，加载物品的美术资源
-    /// </summary>
-    /// <param name="save_path">
-    /// 背包存档路径
-    /// </param>
-  private void BagItemsLoad(string save_path)
-    {
-        serializeProps = JsonUtility.FromJson<Serialize>(SimpleFunction.Json_Read(save_path));
-        PlayerData.props_value = serializeProps.props;
     }
 
-    /// <summary>
-    /// 将新拾取物品加入背包中的物品栏
-    /// </summary>
-    /// <param name="new_item">
-    /// 新拾取的物品
-    /// </param>
-    private void BagPropsUpdate(item new_item)
+    private void Update()
     {
+    }
 
-        for (int i = 0; i < serializeProps.props.Count; i++)
+    internal void Pickup()
+    {
+        var isCollider = Physics.Raycast(PublicVariables.ray, out RaycastHit hit, 10, 1 << 8);
+        if (!isCollider) return;
+        var unknownItem = hit.collider.gameObject.name;
+        var itemInfoStr = unknownItem.Split('_');
+        Debug.Log(itemInfoStr[0]);
+        Debug.Log(itemInfoStr[1]);
+        var itemInfo = StringToInt(itemInfoStr);
+        if (bagItem.Exists(var => var.itemId == itemInfo[0]))
         {
-            if (serializeProps.props[i].name == new_item.name)
+            var addNum = bagItem.Find(var => var.itemId == itemInfo[0]);
+            addNum.itemNum = addNum.itemNum + itemInfo[1];
+        }
+        else
+        {
+            var newItem = new Item(itemInfo[0],itemInfo[1]);
+            bagItem.Add(newItem);
+        }
+        Destroy(hit.collider.gameObject);
+    }
+
+
+    public string SerializeXml(object data)
+    {
+        using (StringWriter sw = new StringWriter())
+        {
+            XmlSerializer xz = new XmlSerializer(data.GetType());
+            xz.Serialize(sw, data);
+            return sw.ToString();
+        }
+    }
+    private int[] StringToInt(string[] str)
+    {
+        int[] ret = { 0, 0 };
+        for (int i = 0; i < 2; i++)
+        {
+            for (int k = 0; k < str[i].Length; k++)
             {
-                serializeProps.props[i].add_number(new_item.num);
-                return;
+                ret[i] = ret[i] * 10 + str[i][k]-'0';
             }
         }
-        serializeProps.props.Add(new_item);
-    }
-    
-    /// <summary>
-    /// 捡起物品时的操作
-    /// </summary>
-    internal void PropsPickUp()
-    {
-        //检测射线是否触及物体
-        bool isCollider = Physics.Raycast(PublicVariables.ray, out RaycastHit hit, 10, 1 << 8);
-        if (!isCollider) return;
-        
-        BagPropsUpdate(new item(hit.collider.gameObject.name));
-        //摧毁环境物品
-        Destroy(hit.collider.gameObject);
-        PlayerData.props_value = serializeProps.props;
-        serializeProps.Load("C:/Users/expre/Desktop/DataBase.json");
+
+        return ret;
     }
 
-
-}
+    }

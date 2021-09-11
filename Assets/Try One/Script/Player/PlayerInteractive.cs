@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerInteractive : MonoBehaviour
 {
     private PlayerBag _playerBag;
-
+    
     private void Awake()
     {
         _playerBag = GetComponentInChildren<PlayerBag>();
@@ -17,9 +17,10 @@ public class PlayerInteractive : MonoBehaviour
         InteractiveClick(PublicVariables.ray, Input.GetKeyDown(KeyCode.F));
     }
 
-    void InteractiveClick(Ray ray, bool clickButton)
+    private void InteractiveClick(Ray ray, bool clickButton)
     {
         if (!clickButton) return;
-        _playerBag.PropsPickUp();
+        _playerBag.Pickup();
+        Debug.Log( _playerBag.SerializeXml(_playerBag.bagItem));
     }
 }

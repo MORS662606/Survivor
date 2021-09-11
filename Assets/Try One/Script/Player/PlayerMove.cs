@@ -14,10 +14,14 @@ public class PlayerMove : MonoBehaviour
     public float _yRotation, _xRotation;
     public Vector3 test;
     private Transform _cameraTransform;
-    internal bool walkMark=false;
+    [Header("Audio")]
+    public AudioClip[] audioClips = new AudioClip[2];
+
+    private AudioSource _audioSource;
     void Start()
     {
         _characterController = GetComponent<CharacterController>();
+        _audioSource = GetComponent<AudioSource>();
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -64,18 +68,32 @@ public class PlayerMove : MonoBehaviour
         if (moveDirection == Vector3.zero)
         {
             PlayerData.player_condition = PlayerCondition.Stand;
+            _audioSource.mute = true;
         }
         else if (meet_run_condition)
         {
             var moveVector =  PlayerData.player_run_speed *moveDirection;
             _characterController.Move(moveVector);
             PlayerData.player_condition = PlayerCondition.Run;
+            if (_audioSource.clip != audioClips[1])
+            {
+                _audioSource.clip = audioClips[1];
+                _audioSource.Play();
+            }
+            _audioSource.mute = false;
         }
         else
         {            
             var moveVector =  PlayerData.player_walk_speed *moveDirection;
             _characterController.Move(moveDirection * PlayerData.player_walk_speed);
             PlayerData.player_condition = PlayerCondition.Walk;
+            if (_audioSource.clip != audioClips[0])
+            {
+                _audioSource.clip = audioClips[0];       
+                _audioSource.Play();
+
+            }
+            _audioSource.mute = false;
         }
     }
 

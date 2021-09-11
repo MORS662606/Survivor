@@ -22,7 +22,7 @@ public class BagUI : MonoBehaviour
 
     private void Item_Dictionary_Initialization()
     {
-        string json = SimpleFunction.Json_Read("C:/Users/Mors/Desktop/Information.json");
+        string json = SimpleFunction.Json_Read("C:/Users/expre/Desktop/Information.json");
         Serialize serialize_dictionary = new Serialize();
         serialize_dictionary = JsonUtility.FromJson<Serialize>(json);
         item_description = serialize_dictionary.Data_Back(true);
@@ -75,7 +75,7 @@ public class BagUI : MonoBehaviour
         Load_Item_Data();
        
 
-        /*测试区
+       /*测试区
         item_description.Add("农夫山泉", "有点甜");
         item_description.Add("旺旺牛奶", "比你聪明，比你强");
         Serialize dictionary_serialize = new Serialize(item_description);
@@ -83,7 +83,7 @@ public class BagUI : MonoBehaviour
         Debug.Log(json);
         Debug.Log(item_description);
 
-        SimpleFunction.Json_Write(json, "C:/Users/Mors/Desktop/Information.json");
+        SimpleFunction.Json_Write(json, "C:/Users/expre/Desktop/Information.json");
        */
     }
     void FixedUpdate()
