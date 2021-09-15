@@ -21,6 +21,6 @@ public class PlayerInteractive : MonoBehaviour
     {
         if (!clickButton) return;
         _playerBag.Pickup();
-        Debug.Log( _playerBag.SerializeXml(_playerBag.bagItem));
+        _playerBag.SerializeXmlWrite(_playerBag.bagItem,_playerBag.savePath);
     }
 }

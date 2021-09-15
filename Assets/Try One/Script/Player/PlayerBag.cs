@@ -2,14 +2,17 @@
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
 
-  [Serializable]public struct Item
+[Serializable]
+public struct Item
 {
     public int itemId;
     public int itemNum;
-    public Item(int id,int num)
+
+    public Item(int id, int num)
     {
         itemId = id;
         itemNum = num;
@@ -18,10 +21,11 @@ using UnityEngine;
 
 public class PlayerBag : MonoBehaviour
 {
-    public  List<Item> bagItem = new List<Item>();
-
+    public List<Item> bagItem = new List<Item>();
+    public string savePath = "D:/BagData.xml";
     private void Awake()
     {
+        SerializeXmlRead(savePath);
     }
 
     private void Update()
@@ -44,21 +48,48 @@ public class PlayerBag : MonoBehaviour
         }
         else
         {
-            var newItem = new Item(itemInfo[0],itemInfo[1]);
+            var newItem = new Item(itemInfo[0], itemInfo[1]);
             bagItem.Add(newItem);
         }
         Destroy(hit.collider.gameObject);
     }
-
-
-    public string SerializeXml(object data)
+    public void SerializeXmlWrite(object data, string path)
     {
-        using (StringWriter sw = new StringWriter())
+        string xmlString;
+        using (var sw = new StringWriter())
         {
-            XmlSerializer xz = new XmlSerializer(data.GetType());
+            var xz = new XmlSerializer(data.GetType());
             xz.Serialize(sw, data);
-            return sw.ToString();
+            xmlString = sw.ToString();
         }
+        try
+        {
+            using (var sw = new StreamWriter(path,false,Encoding.GetEncoding("UTF-8")))
+            {
+                sw.Write(xmlString);
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.Log(exception.Message);
+        }
+    }
+    private void SerializeXmlRead(string path)
+    {
+        try
+        {
+            using (var sr = new StreamReader(path, Encoding.GetEncoding("UTF-8")))
+            {
+                var xz = new XmlSerializer(typeof(List<Item>));
+                bagItem = (List<Item>)xz.Deserialize(sr);
+            }
+        }
+        catch (Exception exception)
+        {
+            Debug.Log(exception.Message);
+        }
+        
+        Debug.Log("Load Success");
     }
     private int[] StringToInt(string[] str)
     {
@@ -67,11 +98,10 @@ public class PlayerBag : MonoBehaviour
         {
             for (int k = 0; k < str[i].Length; k++)
             {
-                ret[i] = ret[i] * 10 + str[i][k]-'0';
+                ret[i] = ret[i] * 10 + str[i][k] - '0';
             }
         }
 
         return ret;
     }
-
-    }
+}
