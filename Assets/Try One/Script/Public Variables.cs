@@ -1,9 +1,12 @@
-﻿using System.Collections;
-using System.IO;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Mors;
 using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using System.Xml;
+using System.Xml.Serialization;
+using UserNamespace.CustomData;
 
 namespace Mors
 {
@@ -126,6 +129,79 @@ namespace Mors
         }
     }
 }
+
+namespace UserNamespace
+{
+   namespace CustomData
+    {
+        public struct Item
+        {
+            public int itemId;
+            public int itemNum;
+            public Item(int id, int num)
+            {
+                itemId = id;
+                itemNum = num;
+            }
+        }
+        public struct ItemData
+        {
+            public int ID;
+            public string Name;
+            public int Weight;
+            public string Description;
+           // public RawImage Picture;
+        }
+    }
+    public static class UserFunction
+    {
+        public static int[] ToInt(string[] str)
+        {
+            var length = str.Length;
+            var ret =new int[length];
+            for (var i = 0; i < length; i++)
+            {
+                for (var k = 0; k < str[i].Length; k++)
+                {
+                    ret[i] = ret[i] * 10 + str[i][k] - '0';
+                }
+            }
+            return ret;
+        }
+        public static int ToInt(string str)
+        {
+            var ret = 0;
+            for (var k = 0; k < str.Length; k++)
+            {
+                ret = ret * 10 + str[k] - '0';
+            }
+            return ret;
+        }
+        public static void SerializeXmlWrite(object data, string path)
+        {
+            string xmlString;
+            using (var sw = new StringWriter())
+            {
+                var xz = new XmlSerializer(data.GetType());
+                var ns = new XmlSerializerNamespaces();
+                ns.Add("", "");
+                xz.Serialize(sw, data, ns);
+                xmlString = sw.ToString();
+            }
+            try
+            {
+                using (var sw = new StreamWriter(path,false,Encoding.GetEncoding("UTF-8")))
+                {
+                    sw.Write(xmlString);
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.Log(exception.Message);
+            }
+        }
+    }
+}
 internal class PlayerData
 {
     internal static PlayerCondition player_condition = PlayerCondition.Stand;
@@ -139,7 +215,7 @@ internal class PlayerData
 
 
     internal static float player_hunger_speed = 10;
-    internal static List<item> props_value;
+    internal static List<Item> BackUp = new List<Item>();
 }
 
 public class PublicVariables

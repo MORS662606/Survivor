@@ -5,19 +5,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml.Serialization;
 using UnityEngine;
+using UserNamespace;
+using UserNamespace.CustomData;
 
-[Serializable]
-public struct Item
-{
-    public int itemId;
-    public int itemNum;
 
-    public Item(int id, int num)
-    {
-        itemId = id;
-        itemNum = num;
-    }
-}
 
 public class PlayerBag : MonoBehaviour
 {
@@ -26,6 +17,8 @@ public class PlayerBag : MonoBehaviour
     private void Awake()
     {
         SerializeXmlRead(savePath);
+
+        PlayerData.BackUp = bagItem;
     }
 
     private void Update()
@@ -38,9 +31,9 @@ public class PlayerBag : MonoBehaviour
         if (!isCollider) return;
         var unknownItem = hit.collider.gameObject.name;
         var itemInfoStr = unknownItem.Split('_');
-        Debug.Log(itemInfoStr[0]);
-        Debug.Log(itemInfoStr[1]);
-        var itemInfo = StringToInt(itemInfoStr);
+       // Debug.Log(itemInfoStr[0]);
+        //Debug.Log(itemInfoStr[1]);
+        var itemInfo = UserFunction.ToInt(itemInfoStr);
         if (bagItem.Exists(var => var.itemId == itemInfo[0]))
         {
             var addNum = bagItem.Find(var => var.itemId == itemInfo[0]);

@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UserNamespace;
+using UserNamespace.CustomData;
 
 struct ItemInformation
 {
@@ -17,15 +19,17 @@ struct ItemInformation
 
 public class BagUI : MonoBehaviour
 {
-    [Header("UI Information")]
-    public TextMeshProUGUI uiName;
+    [Header("UI Information")] public TextMeshProUGUI uiName;
     public TextMeshProUGUI uiWeight;
     public TextMeshProUGUI uiNumber;
     public TextMeshProUGUI uiDescription;
     public RawImage uiPicture;
     public Button[] items;
-    private PlayerBag _playerBag;
-    private void Start()
+
+    private Dictionary<int, ItemData> informationDictionary = new Dictionary<int, ItemData>();
+    private List<ItemData> itemInfoDic = new List<ItemData>();
+
+    private void Awake()
     {
         //获取显示组件
         var item = GameObject.Find("UI/Bag UI/Item");
@@ -44,9 +48,25 @@ public class BagUI : MonoBehaviour
         }*/
     }
 
-    public void ClickButton()
+    private void Start()
     {
-        Debug.Log(_playerBag.bagItem.Count);
-   
+        var tri = new ItemData();
+        tri.ID = 3;
+        tri.Name = "Van";
+        tri.Description = "?";
+        tri.Weight = 30;
+        informationDictionary.Add(3, tri);
+        itemInfoDic.Add(tri);
+        UserFunction.SerializeXmlWrite(itemInfoDic, "D:/Dictionary.xml");
+    }
+
+    internal void LoadToUI(string id)
+    {
+        var itemID = UserFunction.ToInt(id);
+        var info = informationDictionary[itemID];
+        uiDescription.text = info.Description;
+        uiName.text = info.Name;
+        var bagItem = PlayerData.BackUp.Find(var => var.itemId == itemID);
+        uiWeight.text = (info.Weight * bagItem.itemNum).ToString();
     }
 }
