@@ -9,21 +9,19 @@ using UserNamespace;
 using UserNamespace.CustomData;
 
 
-
 public class PlayerBag : MonoBehaviour
 {
-    public List<Item> bagItem = new List<Item>();
-    public string savePath = "D:/BagData.xml";
+    public List<ItemList> BagItemLocal = new List<ItemList>();
+    private const string BagListPath = "D:/BagData.xml";
+    private const string BagListPath2 = "D:/BagData2.xml";
+    private const string ItemInfoPath = "D:/Dictionary.xml";
+
     private void Awake()
     {
-        SerializeXmlRead(savePath);
-
-        PlayerData.BackUp = bagItem;
+        GameLoad(BagListPath, ItemInfoPath);
+        BagItemLocal = GameData.ItemList;
     }
 
-    private void Update()
-    {
-    }
 
     internal void Pickup()
     {
@@ -31,21 +29,23 @@ public class PlayerBag : MonoBehaviour
         if (!isCollider) return;
         var unknownItem = hit.collider.gameObject.name;
         var itemInfoStr = unknownItem.Split('_');
-       // Debug.Log(itemInfoStr[0]);
+        // Debug.Log(itemInfoStr[0]);
         //Debug.Log(itemInfoStr[1]);
         var itemInfo = UserFunction.ToInt(itemInfoStr);
-        if (bagItem.Exists(var => var.itemId == itemInfo[0]))
+        if (BagItemLocal.Exists(var => var.itemId == itemInfo[0]))
         {
-            var addNum = bagItem.Find(var => var.itemId == itemInfo[0]);
+            var addNum = BagItemLocal.Find(var => var.itemId == itemInfo[0]);
             addNum.itemNum = addNum.itemNum + itemInfo[1];
         }
         else
         {
-            var newItem = new Item(itemInfo[0], itemInfo[1]);
-            bagItem.Add(newItem);
+            var newItem = new ItemList(itemInfo[0], itemInfo[1]);
+            BagItemLocal.Add(newItem);
         }
+
         Destroy(hit.collider.gameObject);
     }
+
     public void SerializeXmlWrite(object data, string path)
     {
         string xmlString;
@@ -55,9 +55,10 @@ public class PlayerBag : MonoBehaviour
             xz.Serialize(sw, data);
             xmlString = sw.ToString();
         }
+
         try
         {
-            using (var sw = new StreamWriter(path,false,Encoding.GetEncoding("UTF-8")))
+            using (var sw = new StreamWriter(path, false, Encoding.GetEncoding("UTF-8")))
             {
                 sw.Write(xmlString);
             }
@@ -67,34 +68,30 @@ public class PlayerBag : MonoBehaviour
             Debug.Log(exception.Message);
         }
     }
-    private void SerializeXmlRead(string path)
+
+    private void GameLoad(string pathBagList, string pathItemInfo)
     {
         try
         {
-            using (var sr = new StreamReader(path, Encoding.GetEncoding("UTF-8")))
+            //背包物品
+            using (var sr = new StreamReader(pathBagList, Encoding.UTF8))
             {
-                var xz = new XmlSerializer(typeof(List<Item>));
-                bagItem = (List<Item>)xz.Deserialize(sr);
+                var xz = new XmlSerializer(typeof(List<ItemList>));
+                GameData.ItemList = (List<ItemList>)xz.Deserialize(sr);
+            }
+
+            //物品数据
+            using (var sr = new StreamReader(pathItemInfo, Encoding.UTF8))
+            {
+                var xz = new XmlSerializer(typeof(List<ItemInfo>));
+                GameData.ItemInfo = (List<ItemInfo>)xz.Deserialize(sr);
             }
         }
         catch (Exception exception)
         {
             Debug.Log(exception.Message);
         }
-        
-        Debug.Log("Load Success");
-    }
-    private int[] StringToInt(string[] str)
-    {
-        int[] ret = { 0, 0 };
-        for (int i = 0; i < 2; i++)
-        {
-            for (int k = 0; k < str[i].Length; k++)
-            {
-                ret[i] = ret[i] * 10 + str[i][k] - '0';
-            }
-        }
 
-        return ret;
+        Debug.Log("Load Success");
     }
 }

@@ -408,7 +408,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: fafb77a64b157c042ba27fce1333a01c, type: 3}
+      - m_Target: {fileID: 0}
         m_MethodName: 
         m_Mode: 1
         m_Arguments:
@@ -810,6 +810,7 @@ MonoBehaviour:
   uiDescription: {fileID: 0}
   uiPicture: {fileID: 0}
   items: []
+  ItemInfoLocal: []
 --- !u!4 &46000288 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400016, guid: 56ec0b9a5b8762642811ea26a5242e04,
@@ -9940,7 +9941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f42c058c4405a749a50c188e7266fac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  savePath: D:/BagData.xml
+  BagItemLocal: []
 --- !u!1 &2007641893
 GameObject:
   m_ObjectHideFlags: 0

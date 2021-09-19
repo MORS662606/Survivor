@@ -14,7 +14,6 @@ public class BagItem : MonoBehaviour
         _bagUI = GetComponentInParent<BagUI>();
         _button = GetComponent<Button>();
         _button.onClick.AddListener(ClickThis);
-
     }
     public void ClickThis()
     {

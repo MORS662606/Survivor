@@ -134,17 +134,19 @@ namespace UserNamespace
 {
    namespace CustomData
     {
-        public struct Item
+        [Serializable] 
+        public struct ItemList
         {
             public int itemId;
             public int itemNum;
-            public Item(int id, int num)
+            public ItemList(int id, int num)
             {
                 itemId = id;
                 itemNum = num;
             }
         }
-        public struct ItemData
+        [Serializable] 
+        public struct ItemInfo
         {
             public int ID;
             public string Name;
@@ -177,7 +179,7 @@ namespace UserNamespace
             }
             return ret;
         }
-        public static void SerializeXmlWrite(object data, string path)
+        public static void SerializeSave(object data, string path)
         {
             string xmlString;
             using (var sw = new StringWriter())
@@ -215,8 +217,16 @@ internal class PlayerData
 
 
     internal static float player_hunger_speed = 10;
-    internal static List<Item> BackUp = new List<Item>();
+   
+
 }
+
+public  class GameData
+{
+    internal static List<ItemList> ItemList;// = new List<ItemList>();
+    internal static List<ItemInfo>  ItemInfo;//= new List<ItemInfo>();
+}
+
 
 public class PublicVariables
 {
