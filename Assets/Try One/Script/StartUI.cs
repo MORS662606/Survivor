@@ -2,27 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UserNamespace;
 
 public class StartUI : MonoBehaviour
 {
     private AsyncOperation async;
-    void Start()
-    {
-        StartCoroutine(loading());
-    }
-    void Update()
-    {
-        Debug.Log(async.progress * 100);
-    }
+    private const string BagListPath = "D:/BagData.xml";
+    private const string ItemInfoPath = "D:/Dictionary.xml";
     public void GameStart()
     {
-        SceneManager.LoadScene("GameScene");
+        StartCoroutine(Loading());    
+        Debug.Log(async.progress * 100);
     }
-    IEnumerator loading()
+    IEnumerator Loading()
     {
+        UserFunction.GameLoad(BagListPath, ItemInfoPath);
         async = SceneManager.LoadSceneAsync("GameScene");
-
         yield return async;
-
     }
 }

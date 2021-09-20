@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Mors;
+using UserNamespace;
+using UserNamespace.CustomData;
+
 
 public class PauseUI : MonoBehaviour
 {
@@ -24,5 +27,11 @@ public class PauseUI : MonoBehaviour
     }
 
     public void Button_Setting() { }
+
+    public void Button_Save()
+    {
+       UserFunction.GameSave(new GameData(),"D:/test.xml");
+    }
+
 
 }

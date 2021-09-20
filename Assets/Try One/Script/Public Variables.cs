@@ -179,7 +179,7 @@ namespace UserNamespace
             }
             return ret;
         }
-        public static void SerializeSave(object data, string path)
+        public static void GameSave(object data, string path)
         {
             string xmlString;
             using (var sw = new StringWriter())
@@ -201,6 +201,31 @@ namespace UserNamespace
             {
                 Debug.Log(exception.Message);
             }
+        }
+        public static void GameLoad(string pathBagList, string pathItemInfo)
+        {
+            try
+            {
+                //背包物品
+                using (var sr = new StreamReader(pathBagList, Encoding.UTF8))
+                {
+                    var xz = new XmlSerializer(typeof(List<ItemList>));
+                    GameData.ItemList = (List<ItemList>)xz.Deserialize(sr);
+                }
+
+                //物品数据
+                using (var sr = new StreamReader(pathItemInfo, Encoding.UTF8))
+                {
+                    var xz = new XmlSerializer(typeof(List<ItemInfo>));
+                    GameData.ItemInfo = (List<ItemInfo>)xz.Deserialize(sr);
+                }
+            }
+            catch (Exception exception)
+            {
+                Debug.Log(exception.Message);
+            }
+
+            Debug.Log("Load Success");
         }
     }
 }

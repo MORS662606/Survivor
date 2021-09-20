@@ -18,15 +18,15 @@ public class Bullet : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other)
-    {
+    { 
+        Destroy(this.gameObject);
         if (!other.gameObject.CompareTag("Target")) return; 
         Destroy(other.gameObject);
-        Destroy(this.gameObject);
     }
 
     internal void Popup(Vector3 speedDir)
     {
-        _rigidbody.velocity=speedDir.normalized*100;
+        _rigidbody.velocity=speedDir.normalized*200;
         Destroy(this.gameObject,2f);
     } 
     

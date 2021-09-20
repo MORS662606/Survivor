@@ -12,13 +12,10 @@ using UserNamespace.CustomData;
 public class PlayerBag : MonoBehaviour
 {
     public List<ItemList> BagItemLocal = new List<ItemList>();
-    private const string BagListPath = "D:/BagData.xml";
-    private const string BagListPath2 = "D:/BagData2.xml";
-    private const string ItemInfoPath = "D:/Dictionary.xml";
 
     private void Awake()
     {
-        GameLoad(BagListPath, ItemInfoPath);
+        //GameLoad(BagListPath, ItemInfoPath);
         BagItemLocal = GameData.ItemList;
     }
 
@@ -29,8 +26,7 @@ public class PlayerBag : MonoBehaviour
         if (!isCollider) return;
         var unknownItem = hit.collider.gameObject.name;
         var itemInfoStr = unknownItem.Split('_');
-        // Debug.Log(itemInfoStr[0]);
-        //Debug.Log(itemInfoStr[1]);
+
         var itemInfo = UserFunction.ToInt(itemInfoStr);
         if (BagItemLocal.Exists(var => var.itemId == itemInfo[0]))
         {

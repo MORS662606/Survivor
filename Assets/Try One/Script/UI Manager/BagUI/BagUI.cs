@@ -38,22 +38,33 @@ public class BagUI : MonoBehaviour
         uiNumber = item.transform.Find("Number").gameObject.GetComponent<TextMeshProUGUI>();
         uiDescription = item.transform.Find("Description").gameObject.GetComponent<TextMeshProUGUI>();
         uiPicture = item.transform.Find("Picture").gameObject.GetComponent<RawImage>();
-        items = GameObject.Find("UI/Bag UI/ShowItem").GetComponentsInChildren<Button>();
-
-        
+        items = GameObject.Find("UI/Bag UI/ShowItem").GetComponentsInChildren<Button>(); 
+        //数据同步
+        ItemInfoLocal = GameData.ItemInfo;
+        ButtonUpdate();
     }
 
-    private void Start()
+    private void ButtonUpdate()
     {
-        ItemInfoLocal = GameData.ItemInfo;
-
+        var itemNum = GameData.ItemList.Count;
+        var buttonNum = items.Length;
+        for (var i = 0; i < buttonNum; i++)
+        {
+            if (i < itemNum)
+            {
+                items[i].gameObject.name = GameData.ItemList[i].itemId.ToString();
+            }
+            else
+            {
+                items[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     internal void LoadToUI(string id)
     {
         var itemID = UserFunction.ToInt(id);
         var info = GameData.ItemInfo.Find(var => var.ID == itemID);
-        //var info =GameData.ItemInfo[itemID];
         uiDescription.text = info.Description;
         uiName.text = info.Name;
         var bagItem = GameData.ItemList.Find(var => var.itemId == itemID);
